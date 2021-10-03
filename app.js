@@ -17,35 +17,68 @@ app.get('/',(req,res)=>{
 // create
 app.post('/insert',(req,res)=>{
     User.create({
-        firstname : req.body.username,
-        sno: req.body.sno
-    }).catch(err=>{
-        console.log(err)
+        task : req.body.task,
+        status: 'active'
     })
-
-    res.send('inserted')
+    .then((resp)=>{
+            return res.send(200,{message:'inserted'})
+    })
+    .catch(err=>{
+            return res.send(400,{message:'error: '+err})
+    })
 })
 
 // read
 app.get('/read',(req,res)=>{
-    User.findAll().then((users)=>{
-        res.send(users)
-    }).catch((err)=>console.log(err))
+    User.findAll(
+        {
+            attributes : ['task'],
+             where: { status: 'active' },
+        })
+    .then((tasks)=>{
+         return res.send(200,{data:tasks})
+    })
+    .catch((err)=>
+         return res.send(400,{message:'error: '+err})
+    )
 })
 
 //update
-app.get('/update',(req,res)=>{
-    User.update({firstname:req.query.names},{where:{sno:req.query.sno}}).then((users)=>{
-        console.log(users)
-        res.send(users)
+app.put('/update',(req,res)=>{
+    User.update(
+        {task:req.query.task},
+        {where:{sno:req.query.sno}})
+   .then((users)=>{
+        return res.send(200,{message:'updated'})
     })
-    res.send('updated')
+   .catch((err)=>
+         return res.send(400,{message:'error: '+err})
+    )
+})
+
+app.put('/completed',(req,res)=>{
+    User.update(
+        {status:'completed'},
+        {where:{sno:req.query.sno}})
+   .then((users)=>{
+        return res.send(200,{message:'completed'})
+    })
+   .catch((err)=>
+         return res.send(400,{message:'error: '+err})
+    )
 })
 
 //delete
-app.get('/delete/:sno',(req,res)=>{
-    User.destroy({where:{sno:req.params.sno}})
-    res.send('deleted')
+app.delete('/delete',(req,res)=>{
+     User.update(
+        {status:'deleted'},
+        {where:{sno:req.query.sno}})
+   .then((users)=>{
+        return res.send(200,{message:'deleted'})
+    })
+   .catch((err)=>
+         return res.send(400,{message:'error: '+err})
+    )
 })
 
 
