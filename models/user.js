@@ -1,6 +1,12 @@
 module.exports = (sequelize,DataTypes)=>{
     const User = sequelize.define("User",{
+        
         //column
+        id:{
+            type: DataTypes.INTEGER,
+            primaryKey: true, 
+            autoIncrement: true
+        },
         task: {
             type: DataTypes.STRING,
             allowNull: false,
