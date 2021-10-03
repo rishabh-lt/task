@@ -47,7 +47,7 @@ app.get('/read',(req,res)=>{
 app.put('/update',(req,res)=>{
     User.update(
         {task:req.query.task},
-        {where:{sno:req.query.sno}})
+        {where:{id:req.body.id,status:'active'}})
    .then((users)=>{
         return res.send(200,{message:'updated'})
     })
@@ -59,7 +59,7 @@ app.put('/update',(req,res)=>{
 app.put('/completed',(req,res)=>{
     User.update(
         {status:'completed'},
-        {where:{sno:req.query.sno}})
+        {where:{id:req.body.id}})
    .then((users)=>{
         return res.send(200,{message:'completed'})
     })
@@ -72,7 +72,7 @@ app.put('/completed',(req,res)=>{
 app.delete('/delete',(req,res)=>{
      User.update(
         {status:'deleted'},
-        {where:{sno:req.query.sno}})
+        {id:{sno:req.body.id}})
    .then((users)=>{
         return res.send(200,{message:'deleted'})
     })
